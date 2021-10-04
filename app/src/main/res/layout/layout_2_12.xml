@@ -12,8 +12,6 @@
         android:layout_height="0dp"
         android:background="#FF00000"
         app:layout_constraintBottom_toTopOf="@id/mid"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -22,8 +20,6 @@
         android:layout_height="0dp"
         android:background="@color/purple_200"
         app:layout_constraintBottom_toTopOf="@+id/bottom"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/top" />
 
     <ProgressBar
@@ -33,8 +29,6 @@
         android:layout_marginBottom="150dp"
         android:background="@color/teal_700"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/mid" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
