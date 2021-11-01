@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_graph"
+    app:startDestination="@id/fragment1">
+
+    <fragment
+        android:id="@+id/fragment1"
+        android:name="com.segu.lab_3.Fragment1"
+        android:label="Fragment1">
+        <action
+            android:id="@+id/action_fragment1_to_fragment2"
+            app:destination="@id/fragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment2"
+        android:name="com.segu.lab_3.Fragment2"
+        android:label="Fragment2">
+        <action
+            android:id="@+id/action_fragment2_to_fragment3"
+            app:destination="@id/fragment3" />
+        <action
+            android:id="@+id/action_fragment2_to_fragment1"
+            app:destination="@id/fragment1"
+            app:popUpTo="@id/fragment1"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment3"
+        android:name="com.segu.lab_3.Fragment3"
+        android:label="Fragment3">
+        <action
+            android:id="@+id/action_fragment3_to_fragment1"
+            app:destination="@id/fragment1"
+            app:popUpTo="@id/fragment1"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_fragment3_to_fragment2"
+            app:destination="@id/fragment2"
+            app:popUpTo="@id/fragment2"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <activity
+        android:id="@+id/activityAbout"
+        android:name="com.segu.lab_3.AboutActivity"
+        android:label="activity_about"
+        tools:layout="@layout/about_activity" />
+    <action
+        android:id="@+id/action_to_activityAbout"
+        app:destination="@id/activityAbout" />
+</navigation>
