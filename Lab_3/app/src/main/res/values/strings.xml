@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Lab_3</string>
+    <string name="to_first">To first</string>
+    <string name="to_second">To second</string>
+    <string name="to_third">To third</string>
+    <string name="activity1_text">Fragment 1</string>
+    <string name="activity2_text">Fragment 2</string>
+    <string name="activity3_text">Fragment 3</string>
+    <string name="activity_about_text">Activity about</string>
+    <string name="about">About</string>
+    <string name="hello_world">Hello world</string>
+</resources>
