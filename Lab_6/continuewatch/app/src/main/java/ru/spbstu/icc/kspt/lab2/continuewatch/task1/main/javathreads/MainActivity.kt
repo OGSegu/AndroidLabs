@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import ru.spbstu.icc.kspt.lab2.continuewatch.R
 
 class MainActivity : AppCompatActivity() {
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         while (!paused) {
             Thread.sleep(1000);
             textSecondsElapsed.post {
-                textSecondsElapsed.setText("Seconds elapsed: " + secondsElapsed++)
+                textSecondsElapsed.text = "Seconds elapsed: " + secondsElapsed++
             }
         }
     }
@@ -40,11 +41,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         textSecondsElapsed = findViewById(R.id.textSecondsElapsed)
 
-        if (!paused) {
-            Log.d(TAG, "Created new thread onCreate")
-            backgroundThread = Thread(timerRunnable)
-            backgroundThread.start()
-        }
+        Log.d(TAG, "Created new thread onCreate")
+        backgroundThread = Thread(timerRunnable)
+        backgroundThread.start()
     }
 
     override fun onPause() {

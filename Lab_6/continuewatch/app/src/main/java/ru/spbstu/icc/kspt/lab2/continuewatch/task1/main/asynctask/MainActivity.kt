@@ -35,10 +35,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         textSecondsElapsed = findViewById(R.id.textSecondsElapsed)
 
-        if (!this::timerTask.isInitialized) {
-            timerTask = TimerAsyncTask(timerUpdater)
-            timerTask.execute(secondsElapsed)
-        }
+        timerTask = TimerAsyncTask(timerUpdater)
+        timerTask.execute(secondsElapsed)
     }
 
     override fun onPause() {

@@ -6,35 +6,39 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.coroutines.GlobalScope
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.spbstu.icc.kspt.lab2.continuewatch.R
 
 class MainActivity : AppCompatActivity() {
 
     companion object {
-        val SECONDS_ELAPSED_TEXT = "SecondsElapsed"
+        const val SECONDS_ELAPSED_TEXT = "SecondsElapsed"
     }
 
-    private var secondsElapsed: Int = 0
+    private var secondsElapsed: Long = 0
 
-    @Volatile
-    private var paused: Boolean = false
+    private lateinit var textSecondsElapsed: TextView
 
-    lateinit var textSecondsElapsed: TextView
+    private var startTimestamp: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState)
         val sharedPref = getPreferences(Context.MODE_PRIVATE) ?: return
-        secondsElapsed = sharedPref.getInt(SECONDS_ELAPSED_TEXT, 0)
+        secondsElapsed = sharedPref.getLong(SECONDS_ELAPSED_TEXT, 0L)
 
         setContentView(R.layout.activity_main)
         textSecondsElapsed = findViewById(R.id.textSecondsElapsed)
 
-        if (!paused) {
-            GlobalScope.launch {
-                updateSeconds()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                while (true) {
+                    updateSeconds();
+                }
             }
         }
     }
@@ -43,47 +47,43 @@ class MainActivity : AppCompatActivity() {
         super.onPause()
         val sharedPref = getPreferences(Context.MODE_PRIVATE) ?: return
         with(sharedPref.edit()) {
-            putInt(SECONDS_ELAPSED_TEXT, secondsElapsed)
+            putLong(SECONDS_ELAPSED_TEXT, secondsElapsed)
             apply()
         }
-        Log.d(TAG, "paused = true")
-        paused = true;
     }
 
     override fun onResume() {
         super.onResume()
+        Log.i("onResume", "onResume")
         val sharedPref = getPreferences(Context.MODE_PRIVATE) ?: return
-        secondsElapsed = sharedPref.getInt(SECONDS_ELAPSED_TEXT, 0)
-
-        if (paused) {
-            GlobalScope.launch {
-                updateSeconds();
-            }
-        }
+        secondsElapsed = sharedPref.getLong(SECONDS_ELAPSED_TEXT, 0L)
+        startTimestamp = System.currentTimeMillis()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
 
-        outState.putInt(SECONDS_ELAPSED_TEXT, secondsElapsed)
-        Log.d(TAG, "onSaveInstanceState: " + secondsElapsed)
+        outState.putLong(SECONDS_ELAPSED_TEXT, secondsElapsed)
+        Log.d(TAG, "onSaveInstanceState: $secondsElapsed")
 
         super.onSaveInstanceState(outState)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
 
-        secondsElapsed = savedInstanceState.getInt(SECONDS_ELAPSED_TEXT)
-        Log.d(TAG, "Loading seconds: " + secondsElapsed)
+        secondsElapsed = savedInstanceState.getLong(SECONDS_ELAPSED_TEXT)
+        Log.d(TAG, "Loading seconds: $secondsElapsed")
 
         super.onRestoreInstanceState(savedInstanceState)
     }
 
-    private fun updateSeconds() {
-        while (!paused) {
-            Thread.sleep(1000);
-            textSecondsElapsed.post {
-                textSecondsElapsed.setText("Seconds elapsed: " + secondsElapsed++)
-            }
+    private suspend fun updateSeconds() {
+        delay(10);
+        val timestampStep = System.currentTimeMillis() - startTimestamp
+        if (timestampStep >= 1000) {
+            Log.i("Current timestamp", timestampStep.toString())
+            textSecondsElapsed.text = "Seconds elapsed: " + ++secondsElapsed;
+            Log.i("Coroutine", "Time: $secondsElapsed")
+            startTimestamp = System.currentTimeMillis();
         }
     }
 }

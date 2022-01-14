@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Downloadtask">
 
-        <activity android:name=".glide.MainActivity"
+        <activity android:name=".coroutine.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
